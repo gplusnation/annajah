@@ -371,7 +371,7 @@ Pemateri : Ustadz Umar Abu Abdillah
             const carouselCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRs82MmMakpwAF6XIrmx5idu_g9pUxrDoPj7dfJbGjKIVIDAzZIelvpzo0hRN0WWrTsDsWWq1Wqj3m2/pub?gid=1737017412&single=true&output=csv';
             const audioCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRs82MmMakpwAF6XIrmx5idu_g9pUxrDoPj7dfJbGjKIVIDAzZIelvpzo0hRN0WWrTsDsWWq1Wqj3m2/pub?output=csv';
             const ujianCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRs82MmMakpwAF6XIrmx5idu_g9pUxrDoPj7dfJbGjKIVIDAzZIelvpzo0hRN0WWrTsDsWWq1Wqj3m2/pub?gid=1819456449&single=true&output=csv';
-
+            
             // Logika Ganti Tema
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
@@ -432,11 +432,33 @@ Pemateri : Ustadz Umar Abu Abdillah
                     const csvText = await response.text();
                     container.innerHTML = '';
                     const rows = csvText.trim().split('\n').slice(1);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // Atur waktu ke awal hari untuk perbandingan
+
+                    const visibleItems = [];
+                    
                     if (rows.length > 0) {
                         rows.forEach(row => {
                             const columns = row.split(',');
-                            callback(columns);
+                            // Kolom terakhir dianggap sebagai tanggal rilis
+                            const releaseDateStr = columns[columns.length - 1]?.trim();
+                            if (releaseDateStr) {
+                                const releaseDate = new Date(releaseDateStr);
+                                releaseDate.setHours(0, 0, 0, 0);
+
+                                if (releaseDate <= today) {
+                                    visibleItems.push(columns);
+                                }
+                            }
                         });
+
+                        if (visibleItems.length > 0) {
+                            visibleItems.forEach(item => {
+                                callback(item);
+                            });
+                        } else {
+                            container.innerHTML = `<li class="loading-item">Tidak ada konten yang tersedia saat ini.</li>`;
+                        }
                     } else {
                         container.innerHTML = `<li class="loading-item">Tidak ada data ditemukan.</li>`;
                     }
@@ -445,10 +467,10 @@ Pemateri : Ustadz Umar Abu Abdillah
                     container.innerHTML = `<li class="loading-item">Gagal memuat data. Silakan coba lagi nanti.</li>`;
                 }
             };
-
+            
             // Memuat data carousel
             loadData(carouselCsvUrl, carouselTrack, (columns) => {
-                if (columns.length >= 2) {
+                if (columns.length >= 3) {
                     const imageUrl = columns[0].trim();
                     const targetUrl = columns[1].trim();
                     const carouselItem = document.createElement('div');
@@ -461,13 +483,16 @@ Pemateri : Ustadz Umar Abu Abdillah
                     carouselTrack.appendChild(carouselItem);
                 }
             }).then(() => {
-                clearInterval(carouselInterval);
-                carouselInterval = setInterval(updateCarousel, 3000);
+                // Periksa apakah ada item yang dimuat sebelum memulai carousel
+                if (carouselTrack.children.length > 0) {
+                    clearInterval(carouselInterval);
+                    carouselInterval = setInterval(updateCarousel, 3000);
+                }
             });
 
             // Memuat data audio
             loadData(audioCsvUrl, audioListContainer, (columns) => {
-                if (columns.length >= 3) {
+                if (columns.length >= 4) {
                     const title = columns[0].trim();
                     const artist = columns[1].trim();
                     const audioLink = columns[2].trim();
@@ -489,7 +514,7 @@ Pemateri : Ustadz Umar Abu Abdillah
 
             // Memuat data ujian
             loadData(ujianCsvUrl, ujianListContainer, (columns) => {
-                if (columns.length >= 3) {
+                if (columns.length >= 4) {
                     const id = columns[0].trim();
                     const title = columns[1].trim();
                     const formUrl = columns[2].trim();
