@@ -4,31 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kajian An-Najah</title>
-  <style>
-  * {
-  box-sizing: border-box;
-}
+    <style>
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
       line-height: 1.6;
-      background-color: #f4f7f6;
+      background-color: #121212; /* dark background */
+      color: #e0e0e0; /* light text */
     }
 
     .container {
       max-width: 800px;
       margin: 0 auto;
-      background-color: #fff;
+      background-color: #1e1e1e; /* darker container */
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
     h1 {
-      color: #333;
-      border-bottom: 2px solid #eee;
+      color: #ffffff;
+      border-bottom: 2px solid #333;
       padding-bottom: 10px;
+    }
+
+    h5 {
+      color: #cccccc;
     }
 
     #audio-player {
@@ -38,14 +43,14 @@
 
     #current-title {
       margin-top: 0;
-      color: #007bff;
+      color: #90caf9; /* biru terang */
       font-size: 1.2em;
       margin-bottom: 5px;
     }
 
     #current-subtitle {
       font-size: 0.9em;
-      color: #666;
+      color: #aaaaaa;
       font-style: italic;
       display: block;
       margin-bottom: 15px;
@@ -54,7 +59,7 @@
     #playlist-container {
       list-style: none;
       padding: 0;
-      border: 1px solid #ccc;
+      border: 1px solid #444;
       border-radius: 4px;
       margin-bottom: 10px;
     }
@@ -62,7 +67,9 @@
     #playlist-container li {
       padding: 12px;
       cursor: pointer;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #333;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
       transition: background-color 0.2s;
     }
 
@@ -71,13 +78,13 @@
     }
 
     #playlist-container li:hover {
-      background-color: #e9f0f8;
+      background-color: #333;
     }
 
     #playlist-container li.current-track {
-      background-color: #d1e7ff;
+      background-color: #333c5a;
       font-weight: bold;
-      color: #0056b3;
+      color: #ffffff;
     }
 
     .list-title {
@@ -87,7 +94,7 @@
 
     .list-subtitle {
       font-size: 0.8em;
-      color: #777;
+      color: #bbbbbb;
       display: block;
       margin-top: 2px;
     }
@@ -100,7 +107,7 @@
 
     .pagination button {
       padding: 8px 12px;
-      background-color: #007bff;
+      background-color: #333;
       color: white;
       border: none;
       border-radius: 4px;
@@ -108,66 +115,67 @@
     }
 
     .pagination button:disabled {
-      background-color: #ccc;
+      background-color: #555;
+      color: #aaa;
       cursor: default;
     }
 
     @media (max-width: 600px) {
-  body {
-    margin: 10px;
-    font-size: 14px;
-  }
+      body {
+        margin: 10px;
+        font-size: 14px;
+      }
 
-  .container {
-    padding: 15px;
-  }
+      .container {
+        padding: 15px;
+      }
 
-  h1, h3, h5 {
-    font-size: 1.1em;
-  }
+      h1, h3, h5 {
+        font-size: 1.1em;
+      }
 
-  #current-title {
-    font-size: 1em;
-  }
+      #current-title {
+        font-size: 1em;
+      }
 
-  #current-subtitle {
-    font-size: 0.85em;
-  }
+      #current-subtitle {
+        font-size: 0.85em;
+      }
 
-  #playlist-container li {
-    padding: 10px;
-  }
+      #playlist-container li {
+        padding: 10px;
+      }
 
-  .pagination {
-    flex-direction: column;
-    gap: 10px;
-  }
+      .pagination {
+        flex-direction: column;
+        gap: 10px;
+      }
 
-  .pagination button {
-    width: 100%;
-    font-size: 1em;
-  }
+      .pagination button {
+        width: 100%;
+        font-size: 1em;
+      }
 
-  audio {
-    width: 100%;
-  }
+      audio {
+        width: 100%;
+      }
 
-  .list-title {
-    font-size: 0.95em;
-  }
+      .list-title {
+        font-size: 0.95em;
+      }
 
-  .list-subtitle {
-    font-size: 0.8em;
-  }
-}
-
+      .list-subtitle {
+        font-size: 0.8em;
+      }
     }
   </style>
+
 </head>
 <body>
   <div class="container">
-    <h1>Playlist Audio Annajah</h1>
-    <h5>Ustadz. Umar Abu Abdillah</h5>
+    <h1>Playlist Audio Kitab Al-Qoulul Mufid fii Adillatit Tauhid</h1>
+    <h5>Pemateri : Ustadz Umar Abu Abdillah</h5>
+    
 
     <h3 id="current-title">Memuat...</h3>
     <span id="current-subtitle"></span>
