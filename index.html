@@ -2,8 +2,13 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kajian An-Najah</title>
   <style>
+  * {
+  box-sizing: border-box;
+}
+
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -108,10 +113,54 @@
     }
 
     @media (max-width: 600px) {
-      .pagination {
-        flex-direction: column;
-        gap: 10px;
-      }
+  body {
+    margin: 10px;
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  h1, h3, h5 {
+    font-size: 1.1em;
+  }
+
+  #current-title {
+    font-size: 1em;
+  }
+
+  #current-subtitle {
+    font-size: 0.85em;
+  }
+
+  #playlist-container li {
+    padding: 10px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination button {
+    width: 100%;
+    font-size: 1em;
+  }
+
+  audio {
+    width: 100%;
+  }
+
+  .list-title {
+    font-size: 0.95em;
+  }
+
+  .list-subtitle {
+    font-size: 0.8em;
+  }
+}
+
     }
   </style>
 </head>
@@ -131,7 +180,7 @@
       <button id="next-btn">Selanjutnya ➡️</button>
     </div>
 
-    <center><font size="2">© Yayasan An-Najah Ihya As-Sunnah</font></center>
+    <center><font size="2">© 2025 - Yayasan An-Najah Ihya As-Sunnah</font></center>
   </div>
 
   <script>
