@@ -1,104 +1,143 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Kajian An-Najah</title>
-    
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 20px; 
-            line-height: 1.6;
-            background-color: #f4f7f6;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-        #audio-player { 
-            width: 100%; 
-            margin-bottom: 20px; 
-        }
-        #current-title {
-            margin-top: 0;
-            color: #007bff;
-            font-size: 1.2em;
-            margin-bottom: 5px;
-        }
-        #current-subtitle {
-            font-size: 0.9em;
-            color: #666;
-            font-style: italic;
-            display: block;
-            margin-bottom: 15px;
-        }
-        #playlist-container {
-            list-style: none;
-            padding: 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        #playlist-container li {
-            padding: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
-        }
-        #playlist-container li:last-child {
-            border-bottom: none;
-        }
-        #playlist-container li:hover {
-            background-color: #e9f0f8;
-        }
-        #playlist-container li.current-track {
-            background-color: #d1e7ff;
-            font-weight: bold;
-            color: #0056b3;
-        }
-        .list-title {
-            font-weight: bold;
-            display: block;
-        }
-        .list-subtitle {
-            font-size: 0.8em;
-            color: #777;
-            display: block;
-            margin-top: 2px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Kajian An-Najah</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #f4f7f6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    #audio-player {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    #current-title {
+      margin-top: 0;
+      color: #007bff;
+      font-size: 1.2em;
+      margin-bottom: 5px;
+    }
+
+    #current-subtitle {
+      font-size: 0.9em;
+      color: #666;
+      font-style: italic;
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    #playlist-container {
+      list-style: none;
+      padding: 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    #playlist-container li {
+      padding: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s;
+    }
+
+    #playlist-container li:last-child {
+      border-bottom: none;
+    }
+
+    #playlist-container li:hover {
+      background-color: #e9f0f8;
+    }
+
+    #playlist-container li.current-track {
+      background-color: #d1e7ff;
+      font-weight: bold;
+      color: #0056b3;
+    }
+
+    .list-title {
+      font-weight: bold;
+      display: block;
+    }
+
+    .list-subtitle {
+      font-size: 0.8em;
+      color: #777;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .pagination button {
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pagination button:disabled {
+      background-color: #ccc;
+      cursor: default;
+    }
+
+    @media (max-width: 600px) {
+      .pagination {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Playlist Audio Annajah</h1>
+    <h5>Ustadz. Umar Abu Abdillah</h5>
 
-    <div class="container">
-        <h1>Playlist Audio Annajah</h1>
-        <h5>Ustadz. Umar Abu Abdillah</h5>
-        
-        <h3 id="current-title">Memuat...</h3>
-        <span id="current-subtitle"></span>
-        
+    <h3 id="current-title">Memuat...</h3>
+    <span id="current-subtitle"></span>
+    <audio id="audio-player" controls></audio>
 
-        <audio id="audio-player" controls></audio>
+    <ul id="playlist-container"></ul>
 
-        <ul id="playlist-container">
-            </ul>
-            <center><font size="2">© Yayasan An-Najah Ihya As-Sunnah</font></center>
+    <div class="pagination">
+      <button id="prev-btn">⬅️ Sebelumnya</button>
+      <button id="next-btn">Selanjutnya ➡️</button>
     </div>
-    
 
-    <script>
-        // --- DATA STATIS AUDIO UNTUK MENGHINDARI RATE LIMIT GITHUB ---
-        // Format: { title: "Judul Utama", subtitle: "Deskripsi", url: "URL File" }
-        const audioFiles = [
-  {
+    <center><font size="2">© Yayasan An-Najah Ihya As-Sunnah</font></center>
+  </div>
+
+  <script>
+    const audioFiles = [
+    
+    {
     "title": "Pertemuan 8",
     "subtitle": "Latar belakang penulis membahas makna kalimat أن محمدا رسول الله\nDan salah satu ketentuan dari kalimat tersebut",
     "url": "https://github.com/gplusnation/annajah/raw/refs/heads/main/AUD-20250816-WA0022.m4a"
@@ -300,101 +339,125 @@
     "subtitle": "Bab beriman kepada malaikat,\nBeriman tentang nama-nama malaikat",
     "url": "https://github.com/gplusnation/annajah/raw/refs/heads/main/WhatsApp%20Audio%202025-10-10%20at%2009.24.46.mp4"
   }
+    
+    ]; // ⬅️ Ganti dengan array audio dari Anda
 
-        
-];
-        // Urutkan dari Pertemuan 1 ke Pertemuan 8
-        audioFiles.sort((a, b) => {
-            const numA = parseInt(a.title.split(' ')[1]);
-            const numB = parseInt(b.title.split(' ')[1]);
-            return numA - numB;
+    audioFiles.sort((a, b) => {
+      const numA = parseInt(a.title.split(' ')[1]);
+      const numB = parseInt(b.title.split(' ')[1]);
+      return numA - numB;
+    });
+
+    const audioPlayer = document.getElementById("audio-player");
+    const playlistContainer = document.getElementById("playlist-container");
+    const currentTitle = document.getElementById("current-title");
+    const currentSubtitle = document.getElementById("current-subtitle");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+
+    let currentTrackIndex = 0;
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    function loadTrack(index) {
+      currentTrackIndex = index;
+      const track = audioFiles[currentTrackIndex];
+
+      audioPlayer.src = track.url;
+      currentTitle.textContent = track.title;
+      currentSubtitle.textContent = track.subtitle || "(Tidak ada deskripsi)";
+
+      audioPlayer.play().catch(() => {});
+      updatePlaylistUI();
+    }
+
+    function updatePlaylistUI() {
+      const listItems = playlistContainer.querySelectorAll("li");
+      listItems.forEach((item, index) => {
+        const actualIndex = (currentPage - 1) * itemsPerPage + index;
+        item.classList.remove("current-track");
+        if (actualIndex === currentTrackIndex) {
+          item.classList.add("current-track");
+        }
+      });
+    }
+
+    function renderPlaylistPage(page) {
+      playlistContainer.innerHTML = "";
+      const start = (page - 1) * itemsPerPage;
+      const end = Math.min(start + itemsPerPage, audioFiles.length);
+
+      for (let i = start; i < end; i++) {
+        const track = audioFiles[i];
+        const listItem = document.createElement("li");
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "list-title";
+        titleSpan.textContent = `${i + 1}. ${track.title}`;
+        listItem.appendChild(titleSpan);
+
+        if (track.subtitle) {
+          const subtitleSpan = document.createElement("span");
+          subtitleSpan.className = "list-subtitle";
+          subtitleSpan.textContent = track.subtitle;
+          listItem.appendChild(subtitleSpan);
+        }
+
+        listItem.addEventListener("click", () => {
+          loadTrack(i);
         });
 
-        let currentTrackIndex = 0;
-        const audioPlayer = document.getElementById('audio-player');
-        const playlistContainer = document.getElementById('playlist-container');
-        const currentTitle = document.getElementById('current-title');
-        const currentSubtitle = document.getElementById('current-subtitle');
-        
-        // ----------------------------------------------------
-        // LOGIKA PEMUTARAN AUDIO
-        // ----------------------------------------------------
+        playlistContainer.appendChild(listItem);
+      }
 
-        function loadTrack(index) {
-            currentTrackIndex = index % audioFiles.length; 
-            const track = audioFiles[currentTrackIndex];
-            
-            audioPlayer.src = track.url;
-            currentTitle.textContent = track.title; 
-            currentSubtitle.textContent = track.subtitle || "(Tidak ada deskripsi)";
-            
-            updatePlaylistUI();
-            
-            audioPlayer.play().catch(() => {
-                // Mengabaikan error autoplay, user harus klik tombol play
-            });
+      updatePaginationButtons();
+      updatePlaylistUI();
+    }
+
+    function updatePaginationButtons() {
+      const totalPages = Math.ceil(audioFiles.length / itemsPerPage);
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPlaylistPage(currentPage);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      const totalPages = Math.ceil(audioFiles.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPlaylistPage(currentPage);
+      }
+    });
+
+    audioPlayer.addEventListener("ended", () => {
+      if (currentTrackIndex + 1 < audioFiles.length) {
+        currentTrackIndex++;
+        loadTrack(currentTrackIndex);
+        const newPage = Math.floor(currentTrackIndex / itemsPerPage) + 1;
+        if (newPage !== currentPage) {
+          currentPage = newPage;
+          renderPlaylistPage(currentPage);
         }
-        
-        function updatePlaylistUI() {
-            const listItems = playlistContainer.querySelectorAll('li');
-            listItems.forEach((item, index) => {
-                item.classList.remove('current-track');
-                if (index === currentTrackIndex) {
-                    item.classList.add('current-track');
-                }
-            });
-        }
+      } else {
+        currentTitle.textContent = "Playlist Selesai.";
+        currentSubtitle.textContent = "Ulangi atau pilih trek baru.";
+      }
+    });
 
-        function buildPlaylist() {
-            playlistContainer.innerHTML = ''; 
-            audioFiles.forEach((track, index) => {
-                const listItem = document.createElement('li');
-                
-                // Membuat elemen span untuk Judul dan Subtitle
-                const titleSpan = document.createElement('span');
-                titleSpan.className = 'list-title';
-                titleSpan.textContent = `${index + 1}. ${track.title}`;
-                listItem.appendChild(titleSpan);
-                
-                if (track.subtitle) {
-                    const subtitleSpan = document.createElement('span');
-                    subtitleSpan.className = 'list-subtitle';
-                    subtitleSpan.textContent = track.subtitle;
-                    listItem.appendChild(subtitleSpan);
-                }
-
-                listItem.addEventListener('click', () => {
-                    currentTrackIndex = index;
-                    loadTrack(currentTrackIndex);
-                });
-                
-                playlistContainer.appendChild(listItem);
-            });
-            
-            // Muat trek pertama saat inisialisasi
-            if (audioFiles.length > 0) {
-                loadTrack(currentTrackIndex);
-            } else {
-                currentTitle.textContent = "Playlist kosong.";
-                currentSubtitle.textContent = "";
-            }
-        }
-
-        audioPlayer.addEventListener('ended', () => {
-            currentTrackIndex++;
-            if (currentTrackIndex < audioFiles.length) {
-                loadTrack(currentTrackIndex);
-            } else {
-                currentTrackIndex = 0; 
-                currentTitle.textContent = "Playlist Selesai.";
-                currentSubtitle.textContent = "Ulangi atau pilih trek baru.";
-                updatePlaylistUI();
-            }
-        });
-
-        // MULAI: Bangun playlist statis
-        buildPlaylist();
-    </script>
-
+    // Inisialisasi
+    if (audioFiles.length > 0) {
+      loadTrack(0);
+      renderPlaylistPage(currentPage);
+    } else {
+      currentTitle.textContent = "Playlist kosong.";
+      currentSubtitle.textContent = "";
+    }
+  </script>
 </body>
 </html>
