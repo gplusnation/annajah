@@ -101,8 +101,10 @@
 
     .pagination {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       margin-bottom: 20px;
+      gap: 10px;
+
     }
 
     .pagination button {
@@ -146,15 +148,6 @@
         padding: 10px;
       }
 
-      .pagination {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .pagination button {
-        width: 100%;
-        font-size: 1em;
-      }
 
       audio {
         width: 100%;
@@ -207,11 +200,11 @@
     <ul id="playlist-container"></ul>
 
     <div class="pagination">
-  <button id="prev-btn">⬅️ Sebelumnya</button>
+  <button id="prev-btn">⬅️ Prev </button>
   
   <div id="page-numbers"></div>
   
-  <button id="next-btn">Selanjutnya ➡️</button>
+  <button id="next-btn">Next ➡️</button>
 </div>
 
     <center><font size="2">© 2025 - Yayasan An-Najah Ihya As-Sunnah</font></center>
@@ -820,7 +813,7 @@
 function renderPageNumbers(totalPages) {
   pageNumbers.innerHTML = "";
 
-  const maxPagesToShow = 5;
+  const maxPagesToShow = 3;
   let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
   let endPage = startPage + maxPagesToShow - 1;
 
