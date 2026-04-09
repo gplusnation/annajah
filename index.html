@@ -168,6 +168,29 @@
         font-size: 0.8em;
       }
     }
+    
+#page-numbers {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-btn {
+  padding: 6px 10px;
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.page-btn.active {
+  background-color: #90caf9;
+  color: black;
+  font-weight: bold;
+}
   </style>
 
 </head>
@@ -184,9 +207,12 @@
     <ul id="playlist-container"></ul>
 
     <div class="pagination">
-      <button id="prev-btn">⬅️ Sebelumnya</button>
-      <button id="next-btn">Selanjutnya ➡️</button>
-    </div>
+  <button id="prev-btn">⬅️ Sebelumnya</button>
+  
+  <div id="page-numbers"></div>
+  
+  <button id="next-btn">Selanjutnya ➡️</button>
+</div>
 
     <center><font size="2">© 2025 - Yayasan An-Najah Ihya As-Sunnah</font></center>
   </div>
@@ -682,6 +708,7 @@
     const currentSubtitle = document.getElementById("current-subtitle");
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
+    const pageNumbers = document.getElementById("page-numbers");
 
     let currentTrackIndex = 0;
     let currentPage = 1;
@@ -743,10 +770,13 @@
 }
 
     function updatePaginationButtons() {
-      const totalPages = Math.ceil(audioFiles.length / itemsPerPage);
-      prevBtn.disabled = currentPage === 1;
-      nextBtn.disabled = currentPage === totalPages;
-    }
+  const totalPages = Math.ceil(audioFiles.length / itemsPerPage);
+
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === totalPages;
+
+  renderPageNumbers(totalPages);
+}
 
     prevBtn.addEventListener("click", () => {
       if (currentPage > 1) {
@@ -786,9 +816,52 @@
       currentTitle.textContent = "Playlist kosong.";
       currentSubtitle.textContent = "";
     }
+
+function renderPageNumbers(totalPages) {
+  pageNumbers.innerHTML = "";
+
+  const maxPagesToShow = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+  let endPage = startPage + maxPagesToShow - 1;
+
+  if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = Math.max(1, endPage - maxPagesToShow + 1);
+  }
+
+  // Tombol halaman
+  for (let i = startPage; i <= endPage; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.className = "page-btn";
+    if (i === currentPage) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      currentPage = i;
+      renderPlaylistPage(currentPage);
+    });
+    pageNumbers.appendChild(btn);
+  }
+
+  // Tambahkan titik-titik dan halaman terakhir jika perlu
+  if (endPage < totalPages) {
+    const dots = document.createElement("span");
+    dots.textContent = " ... ";
+    dots.style.padding = "6px 10px";
+    pageNumbers.appendChild(dots);
+
+    const lastBtn = document.createElement("button");
+    lastBtn.textContent = totalPages;
+    lastBtn.className = "page-btn";
+    if (currentPage === totalPages) lastBtn.classList.add("active");
+    lastBtn.addEventListener("click", () => {
+      currentPage = totalPages;
+      renderPlaylistPage(currentPage);
+    });
+    pageNumbers.appendChild(lastBtn);
+  }
+}
   </script>
 </body>
 </html>
-
 
 
